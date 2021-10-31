@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Diário Escolar Online</string>
+    <string-array name="materiasNotaSeparadas">
+        <item>Matemática</item>
+        <item>Física</item>
+        <item>Química</item>
+        <item>Biologia</item>
+        <item>Português</item>
+        <item>Literatura</item>
+        <item>Geografia</item>
+        <item>História</item>
+    </string-array>
+</resources>
