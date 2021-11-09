@@ -5,24 +5,46 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+
+import Ferramentas.EstudantesDB;
+import Modelo.Estudante;
 
 public class PerfilActivity extends AppCompatActivity {
 
-    private TextView tNotaPorMateria,tHistorico, tSair;
+    private TextView bNotaPorMateria, bHistorico, bSair, bAlterarSenha, tRegistroAcademico, tNomeEstudante, tEmailEstudante, tSenha, tSenhaConfirmar;
+    private Estudante estudante=null;
+
+    EstudantesDB db = new EstudantesDB(PerfilActivity.this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil);
 
-        tNotaPorMateria = (TextView)findViewById(R.id.tNotaPorMateria);
-        tHistorico = (TextView)findViewById(R.id.tHistorico);
-        tSair = (TextView)findViewById(R.id.tSair);
+        bNotaPorMateria = (TextView)findViewById(R.id.tNotaPorMateria);
+        bHistorico = (TextView)findViewById(R.id.tHistorico);
+        bSair = (TextView)findViewById(R.id.tSair);
+        bAlterarSenha = (TextView)findViewById(R.id.tAlterarSenha);
 
-        tNotaPorMateria.setOnClickListener(new View.OnClickListener()
+        tRegistroAcademico = (TextView)findViewById(R.id.tRegistroAcademico);
+        tNomeEstudante = (TextView)findViewById(R.id.tNomeEstudante);
+        tEmailEstudante = (TextView)findViewById(R.id.tEmailEstudante);
+        tSenha = (TextView)findViewById(R.id.tSenha);
+        tSenhaConfirmar = (TextView)findViewById(R.id.tSenhaConfirmar);
+
+        Bundle dado = getIntent().getExtras();
+        String idUsuario = dado.getString("RegistroAcademico");
+        estudante = db.buscarEstudante(idUsuario);
+
+        System.out.println("RA: " + estudante.getRegistroAcademico() + "Nome: " + estudante.getNomeEstudante() + "Email: " + estudante.getEmailEstudante()
+                + "Senha: " + estudante.getSenhaEstudante());
+
+        tRegistroAcademico.setText(estudante.getRegistroAcademico()+"");
+        tNomeEstudante.setText(estudante.getNomeEstudante());
+        tEmailEstudante.setText(estudante.getEmailEstudante());
+
+        bNotaPorMateria.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -31,7 +53,8 @@ public class PerfilActivity extends AppCompatActivity {
                 startActivity(it);
             }
         });
-        tHistorico.setOnClickListener(new View.OnClickListener()
+
+        bHistorico.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
@@ -39,7 +62,31 @@ public class PerfilActivity extends AppCompatActivity {
                 startActivity(it);
             }
         });
-        tSair.setOnClickListener(new View.OnClickListener()
+
+        bAlterarSenha.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                String senha1 = tSenha.getText().toString().trim();
+                String senha2 = tSenhaConfirmar.getText().toString().trim();
+                if(senha1.equals(senha2)){
+                    System.out.println("RA: " + estudante.getRegistroAcademico() + "Nome: " + estudante.getNomeEstudante() + "Email: " + estudante.getEmailEstudante()
+                            + "Senha: " + estudante.getSenhaEstudante());
+
+                    estudante.setSenhaEstudante(senha1);
+                    db.atualizarEstudante(estudante);
+                    System.out.println("RA: " + estudante.getRegistroAcademico() + "Nome: " + estudante.getNomeEstudante() + "Email: " + estudante.getEmailEstudante()
+                            + "Senha: " + estudante.getSenhaEstudante());
+
+                    tSenha.setText(null);
+                    tSenhaConfirmar.setText(null);
+                }else{
+                    System.out.println("Senhas não correspondidas");
+                }
+            }
+        });
+
+        bSair.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view) {
